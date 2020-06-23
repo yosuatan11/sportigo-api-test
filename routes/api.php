@@ -14,6 +14,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/user', [
-    'uses' => 'UserController@signup'
-]);
+Route::post('login', 'UserController@login');
+Route::post('register', 'UserController@register');
+
+Route::group(['middleware' => 'auth.jwt'], function () {
+    Route::get('logout', 'UserController@logout');
+
+    Route::get('user', 'UserController@getAuthUser');
+
+    
+});
