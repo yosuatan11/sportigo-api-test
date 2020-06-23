@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class Booking extends Model
 {
@@ -16,5 +17,5 @@ class Booking extends Model
         return $this->belongsTo(Field::class);
     }
 
-    protected $fillable = ['user_id', 'field_id', 'time'];
+    protected $fillable = ['user_id', 'field_id', 'date', 'time'];
 }

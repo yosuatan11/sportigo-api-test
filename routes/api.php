@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BookingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -22,5 +23,7 @@ Route::group(['middleware' => 'auth.jwt'], function () {
 
     Route::get('user', 'UserController@getAuthUser');
 
-    
+    Route::get('data', 'BookingController@index');
+    Route::post('booking', 'BookingController@store');
+    Route::get('data/{date}', 'BookingController@show');
 });

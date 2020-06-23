@@ -19,9 +19,9 @@ class UserController extends Controller
         ]);
 
         $user = new User([
-            'username' => $request->input('username'),
-            'email' => $request->input('email'),
-            'password' => bcrypt($request->input('password'))
+            'username' => $request->username,
+            'email' => $request->email,
+            'password' => bcrypt($request->password)
         ]);
         $user->save();
         return response()->json([

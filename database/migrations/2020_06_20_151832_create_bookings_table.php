@@ -17,6 +17,7 @@ class CreateBookingsTable extends Migration
             $table->id();
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('field_id');
+            $table->date('date');
             $table->string('time', 5);
             $table->timestamps();
         });
