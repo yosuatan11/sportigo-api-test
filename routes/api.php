@@ -20,10 +20,11 @@ Route::post('register', 'UserController@register');
 
 Route::group(['middleware' => 'auth.jwt'], function () {
     Route::get('logout', 'UserController@logout');
-
     Route::get('user', 'UserController@getAuthUser');
 
-    Route::get('data', 'BookingController@index');
+    Route::get('booking', 'BookingController@index');
     Route::post('booking', 'BookingController@store');
-    Route::get('data/{date}', 'BookingController@show');
+    Route::get('booking/{date}', 'BookingController@show');
+    Route::put('booking/{id}', 'BookingController@update');
+    Route::delete('booking/{id}', 'BookingController@destroy');
 });

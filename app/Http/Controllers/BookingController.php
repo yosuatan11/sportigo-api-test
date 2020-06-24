@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 use DateTime;
 use App\Http\Resources\BookingResource;
-use Illuminate\Support\Facades\Date;
 
 class BookingController extends Controller
 {
@@ -66,13 +65,12 @@ class BookingController extends Controller
             $temp = substr( $request->date, -10, 10);
             $date = new DateTime($temp);
         }
-        $exist = null;
         $exist = Booking::where([
             ['field_id', '=' ,$request->field_id],
             ['date', '=', $date],
             ['time', '=', $request->time],
         ])->get();
-        if($exist == null){
+        if(!$exist){
             $booking = Booking::create([
                 'user_id' => $this->user->id,
                 'field_id' => $request->field_id,
@@ -87,7 +85,7 @@ class BookingController extends Controller
         } else{
             return response()->json([
                 'message' => 'Field has been booked',
-            ], 200);
+            ], 401);
         }
 
     }
@@ -127,7 +125,7 @@ class BookingController extends Controller
      */
     public function edit($id)
     {
-        
+
     }
 
     /**
@@ -139,7 +137,29 @@ class BookingController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $booking = Booking::find($id);
+        if (!$booking){
+            return response()->json([
+                'message' => 'Sorry, order not found'
+            ],400);
+        }
 
+        if ( $this->user->id !== $booking->user_id){
+            return response()->json([
+                'message' => 'You can only update your order'
+            ],403);
+        }
+
+        $updated = $booking->fill($request->all())->save();
+        if ($updated) {
+            return response()->json([
+                'message' => 'Booking has been updated'
+            ],201);
+        } else {
+            return response()->json([
+                'message' => 'Sorry, task could not be updated.'
+            ], 500);
+        }
     }
 
     /**
@@ -150,7 +170,28 @@ class BookingController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $booking = Booking::find($id);
+        if (!$booking){
+            return response()->json([
+                'message' => 'Sorry, order not found'
+            ],400);
+        }
+
+        if ( $this->user->id !== $booking->user_id){
+            return response()->json([
+                'message' => 'You can only update your order'
+            ],403);
+        }
+
+        if ($booking->delete()) {
+            return response()->json([
+                'message' => 'Booking has been canceled'
+            ]);
+        } else {
+            return response()->json([
+                'message' => 'Booking could not be deleted.'
+            ], 500);
+        }
     }
 
     public function getDate(){
